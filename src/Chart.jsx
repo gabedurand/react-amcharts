@@ -3,7 +3,9 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import React, { useLayoutEffect } from "react";
 
-export default function Chart({ data, stroke = "#000", fill = "#00ff00" }) {
+export default function Chart(props) {
+  const { data } = props;
+
   useLayoutEffect(() => {
     let root = am5.Root.new("chartdiv");
 
@@ -27,7 +29,7 @@ export default function Chart({ data, stroke = "#000", fill = "#00ff00" }) {
     let xAxis = chart.xAxes.push(
       am5xy.CategoryAxis.new(root, {
         renderer: am5xy.AxisRendererX.new(root, {}),
-        categoryField: "category",
+        categoryField: props.xAxisField,
       })
     );
     xAxis.data.setAll(data);
@@ -35,15 +37,15 @@ export default function Chart({ data, stroke = "#000", fill = "#00ff00" }) {
     // Create series
     let series1 = chart.series.push(
       am5xy.ColumnSeries.new(root, {
-        name: "Series",
+        name: props.seriesName,
         xAxis: xAxis,
         yAxis: yAxis,
         valueYField: "value1",
-        categoryXField: "category",
+        categoryXField: props.xAxisField,
       })
     );
-    series1.set("fill", am5.color(fill));
-    series1.set("stroke", am5.color(stroke));
+    series1.set("fill", am5.color(props.fill));
+    series1.set("stroke", am5.color(props.stroke));
     series1.data.setAll(data);
 
     // Add legend
@@ -51,7 +53,7 @@ export default function Chart({ data, stroke = "#000", fill = "#00ff00" }) {
     legend.data.setAll(chart.series.values);
 
     // Add cursor
-    chart.set("cursor", am5xy.XYCursor.new(root, {}));
+    if (props.cursor) chart.set("cursor", am5xy.XYCursor.new(root, {}));
 
     return () => {
       root.dispose();

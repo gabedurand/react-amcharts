@@ -20,5 +20,13 @@ export default function ChartsWrapper({ type }) {
     },
   ];
 
-  return <Chart data={data} />;
+  return (
+    <Chart
+      data={data}
+      stroke="#FF573380"
+      fill="#FF5733"
+      xAxisField="category"
+      seriesName="Data"
+    />
+  );
 }
